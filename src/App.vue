@@ -24,7 +24,6 @@
       />
     </div>
 
-    <!-- Modal con detalle de carta -->
     <div
       v-if="cartaSeleccionada"
       class="fixed inset-0 flex items-center justify-center z-50"
