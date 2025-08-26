@@ -11,7 +11,7 @@
       <p class="mt-4 text-lg text-gray-700 font-semibold">Loading cards...</p>
     </div>
 
-    <div v-else-if="filteredCards.length === 0">No cards found.</div>
+    <div v-else-if="filteredCards.length === 0" class="font-bold">No cards found.</div>
     <div
       v-else
       class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4"
@@ -60,9 +60,8 @@ export default {
   components: { PokemonCard, BuscadorPokemon },
   data() {
     return {
-      cards: [],
       filteredCards: [],
-      loading: true,
+      loading: false,
       cartaSeleccionada: null,
       tiltTransform: "scale(1)",
       lightStyle: {},
@@ -96,6 +95,8 @@ export default {
       this.lightStyle = {};
     },
     async buscarPorNombre(nombre) {
+      if (!nombre) return;
+
       this.loading = true;
       try {
         const response = await axios.get(
@@ -116,27 +117,6 @@ export default {
         this.loading = false;
       }
     },
-  },
-
-  async mounted() {
-    try {
-      const response = await axios.get(
-        "https://api.pokemontcg.io/v2/cards?page=1&pageSize=250",
-        {
-          headers: {
-            "X-Api-Key": import.meta.env.VITE_POKEMON_API_KEY,
-          },
-        }
-      );
-
-      this.cards = response.data.data;
-      this.filteredCards = this.cards;
-
-      this.loading = false;
-    } catch (error) {
-      console.error("Error al cargar cartas:", error);
-      this.loading = false;
-    }
   },
 
   computed: {
